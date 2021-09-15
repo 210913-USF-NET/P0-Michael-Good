@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using System;
 
-namespace Models;
+namespace Models
 {
     public class StoreFront
     {
@@ -18,7 +19,7 @@ namespace Models;
 
         public override string ToString()
         {
-            return $"Store Name: {this.Name} \nAddress: {this.Address}"
+            return $"Store Name: {this.Num} \nAddress: {this.Address}";
         }
     }
 }

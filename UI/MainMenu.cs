@@ -1,4 +1,6 @@
 using System;
+using Models;
+using StoreBL;
 
 namespace UI
 {
@@ -11,7 +13,7 @@ namespace UI
         }
         public void Start()
         {
-            Console.WriteLine("Welcome to ")
+            Console.WriteLine("Welcome to My Store!");
         }
     }
 }

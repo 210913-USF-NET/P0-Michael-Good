@@ -1,5 +1,7 @@
 ﻿using System;
 using Models;
+using StoreBL;
+using DL;
 
 namespace UI
 {
@@ -9,7 +11,7 @@ namespace UI
         {
             Console.WriteLine("Welcome to My Store!");
 
-            new MainMenu(new BL(new ExampleRepo()));
+            new MainMenu(new BL(new ExampleRepo())).Start();
 
 
 

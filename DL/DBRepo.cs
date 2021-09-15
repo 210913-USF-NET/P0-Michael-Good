@@ -5,8 +5,10 @@ namespace DL
 {
     public class DBRepo : IRepo
     {
-        public List<StoreFront> GetAllStoreFronts()
+        public List<StoreFront> GetALLStoreFront()
         {
+            return new List<StoreFront>(){}; 
+            
             throw new System.NotImplementedException();
         }
     }

@@ -8,7 +8,7 @@ namespace Models
     {
         public Customer() {}
 
-        Public Customer(string name)
+        public Customer(string name)
         {
             this.Name = name;
         }
