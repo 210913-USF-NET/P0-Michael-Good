@@ -9,7 +9,7 @@ namespace DL
         public List<StoreFront> GetALLStoreFront()
         {
             //placeholder for now
-            return new List<StoreFront>() {};
+            return new List<StoreFront>(){};
         }
     }
 }
