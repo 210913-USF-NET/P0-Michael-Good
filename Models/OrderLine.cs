@@ -2,9 +2,9 @@ using System.Runtime.CompilerServices;
 
 namespace Models
 {
-    public class Inventory
+    public class OrderLine
     {
-        public Inventory(Product item, int quantity)
+        public OrderLine(Product item, int quantity)
         {
             this.Item = item;
             this.Quantity = quantity;

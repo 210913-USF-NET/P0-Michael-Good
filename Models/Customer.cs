@@ -6,26 +6,19 @@ namespace Models
 {
     public class Customer
     {
-        public Customer() {}
-
-        public Customer(string name)
+        public Customer(){
+            Id = 0;
+        }
+        public Customer(string name, long phoneNum)
         {
+            this.PhoneNum = phoneNum;
             this.Name = name;
+            Id = 0;
         }
 
-        public Customer(string name, int age) : this(name)
-        {
-            this.Age = age;
-        }
-
+        public int Id{get;set;}
         public string Name{get;set;}
-        public int Age{get;set;}
-        public List<Order> Orders{get;set;}
-
-
-
-
-
+        public long PhoneNum{get;set;}
 
     }
 }

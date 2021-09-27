@@ -9,7 +9,7 @@ namespace UI
     {
         static void Main(string[] args)
         {
-            new MainMenu(new BL(new ExampleRepo())).Start();
+            new MainMenu(new BL(new DBRepo())).Start();
             
         }
     }

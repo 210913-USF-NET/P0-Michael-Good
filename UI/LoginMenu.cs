@@ -1,6 +1,7 @@
 using System;
 using Models;
 using StoreBL;
+using DL;
 
 namespace UI
 {
@@ -13,50 +14,44 @@ namespace UI
         }
         public void Start()
         {
-            bool exit = false;
-            string input = "";
-            do
+            Customer customer = null;
+            string input;
+            LogStart:
+            Console.WriteLine("Please enter your phone number no (, ), -");
+            input = Console.ReadLine();
+            long parsedInput;
+            bool parseSuccess = Int64.TryParse(input, out parsedInput);
+            if(parseSuccess && parsedInput >= 0)
             {
-                Console.WriteLine("Please enter your phone number (no \"(, ), -\"");
-                Console.WriteLine("[x] Leave");
-                input = Console.ReadLine();
-
-                if(input == "x")
-                {
-                    Console.WriteLine("Goodbye!");
-                    exit = true;
-                }
-                else
-                {
-                    //call somthing that will check db for phone number given and return bool if valid
-                    bool valid = true;
-                    if(valid)
+                customer = _bl.GetCustomerByPhone(parsedInput);
+                if(customer.Id == 0)
+                {   
+                    phoneStart:
+                    Console.WriteLine("That number is not registared, would you like to try another?");
+                    Console.WriteLine("[0] Yes");
+                    Console.WriteLine("[1] No");
+                    input = Console.ReadLine();
+                    switch (input)
                     {
-                        //send to shopping menu
-                    }
-                    else
-                    {
-                        Console.WriteLine("The Phonenumber you have tried is not valid, would you like to try another Phonenubmer?");
-                        Console.WriteLine("[0] Yes");
-                        Console.WriteLine("[1] No");
+                        case "1":
+                            return;
 
-                        switch (input)
-                        {
-                            case "0":
-                                break;
+                        case "0":
+                            goto LogStart;
 
-                            case "1":
-                                exit = true;
-                                break;
-
-                            default:
-                                Console.WriteLine("Sorry, what you typed in was not a valid responce");
-                                break;
-                        }
-
+                        default:
+                            Console.WriteLine("Sorry, what you typed in was not a valid responce");
+                            goto phoneStart;
                     }
                 }
-            }while (!exit);
+            }
+            else
+            {
+                Console.WriteLine("invalid input");
+                goto LogStart;
+            }
+
+            new OrderMenu(new BL(new DBRepo())).Start(customer.Id);
         }
     }
 }

@@ -1,6 +1,8 @@
 using System;
 using Models;
 using StoreBL;
+using DL;
+using System.Transactions;
 
 namespace UI
 {
@@ -30,17 +32,29 @@ namespace UI
                 switch (input)
                 {
                     case "0":
-                        //login menu
+                        new LoginMenu(new BL(new DBRepo())).Start();
                         break;
 
                     case "1":
-                        //sign up menu
-
+                        new RegistrationMenu(new BL(new DBRepo())).Start();
                         break;
 
                     case "x":
                         Console.WriteLine("Goodbye!");
                         exit = true;
+                        break;
+                    
+                    case "admin":
+                        Console.WriteLine("enter password");
+                        input = Console.ReadLine();
+                        if(input == "qwerty")
+                        {
+                            new AdminMenu(new BL(new DBRepo())).Start();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Incorrect password");
+                        }
                         break;
 
                     default:
