@@ -17,6 +17,11 @@ namespace UI
         {
             _bl = bl;
         }
+
+        /// <summary>
+        /// registers new customer into db given their phone number and name
+        /// then sends them to the order menu
+        /// </summary>
         public void Start()
         {
             string connectionString = File.ReadAllText(@"../connectionString.txt");

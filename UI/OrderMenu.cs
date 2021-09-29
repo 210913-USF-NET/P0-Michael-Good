@@ -17,6 +17,12 @@ namespace UI
         {
             _bl = bl;
         }
+        
+        /// <summary>
+        /// Gets user to pick store then to pick items for the that store to add to order
+        /// after leaving the store the order will be processed and customer will be sent to main menu
+        /// </summary>
+        /// <param name="CustomerId"></param>
         public void Start(int CustomerId)
         {
             decimal Total = 0;

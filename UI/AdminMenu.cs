@@ -20,6 +20,13 @@ namespace UI
         {
             _bl = bl;
         }
+
+        /// <summary>
+        /// menu for admin use only
+        /// add inventory
+        /// add store
+        /// view orders
+        /// </summary>
         public void Start()
         {
             bool exit = false;
@@ -58,6 +65,10 @@ namespace UI
                 }
             }while (!exit);
         }
+
+        /// <summary>
+        /// takes user to fill inventory part of admin menu, used to help clean up switch statement
+        /// </summary>
         public void FillInventory()
         {
             
@@ -141,6 +152,9 @@ namespace UI
             }
         }
 
+        /// <summary>
+        /// takes use to create store part of admin menu, used to help clean up switch statement
+        /// </summary>
         public void CreateStore()
         {
             Console.WriteLine("please enter the address for the new store");
@@ -149,6 +163,9 @@ namespace UI
             _bl.AddNewStoreFront(store);
         }
 
+        /// <summary>
+        /// takes user to vieworder part of admin menu, used to help clean up switch statement
+        /// </summary>
         public void ViewOrders()
         {
             Console.WriteLine("[0] View Orders by customer ordered by price");

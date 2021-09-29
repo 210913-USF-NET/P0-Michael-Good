@@ -17,6 +17,12 @@ namespace UI
             _bl = bl;
         }
 
+        /// <summary>
+        /// main menu used to send to either
+        /// login menu
+        /// register menu
+        /// admin menu
+        /// </summary>
         public void Start()
         {   
             string connectionString = File.ReadAllText(@"../connectionString.txt");
@@ -54,7 +60,7 @@ namespace UI
                     case "admin":
                         Console.WriteLine("enter password");
                         input = Console.ReadLine();
-                        if(input == "qwerty")
+                        if(input == "Iloveshrek<3")
                         {
                             new AdminMenu(new BL(new DBRepo(context))).Start();
                         }

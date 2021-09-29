@@ -17,6 +17,11 @@ namespace DL
         {
             _context = context;
         }
+
+        /// <summary>
+        /// Gets all stores from database returns them in a list
+        /// </summary>
+        /// <returns> list of all stores from db </returns>
         public List<Model.StoreFront> GetALLStoreFront()
         {
             List<Model.StoreFront> sFronts = _context.StoreFronts.Select(StoreFront => new Model.StoreFront()
@@ -73,6 +78,11 @@ namespace DL
             return store;
 
         }
+
+        /// <summary>
+        /// sends order to db then sets up all orderlines related to order
+        /// </summary>
+        /// <param name="order"></param>
         public void SendOrder(Model.Order order)
         {
             Entity.Order orderSend = new Entity.Order(){
@@ -97,6 +107,11 @@ namespace DL
                 _context.ChangeTracker.Clear();
             }
         }
+
+        /// <summary>
+        /// adds new customer to db 
+        /// </summary>
+        /// <param name="customer"></param>
         public void AddNewCustomer(Model.Customer customer)
         {
             Entity.Customer customerAdd = new Entity.Customer(){
@@ -107,6 +122,12 @@ namespace DL
             _context.SaveChanges();
             _context.ChangeTracker.Clear();
         }
+
+        /// <summary>
+        /// gets customer by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns> returns customer with id</returns>
         public Model.Customer GetCustomerById(int id)
         {
             Entity.Customer customerById = _context.Customers.FirstOrDefault(c => c.Id == id);
@@ -116,6 +137,12 @@ namespace DL
                 PhoneNum = customerById.PhoneNum
             };
         }
+
+        /// <summary>
+        /// gets customer by phonenum and returns default customer with id = 0 if no customer with phonenum exists in db
+        /// </summary>
+        /// <param name="phoneNum"></param>
+        /// <returns> returns customer with given phonenum or default</returns>
         public Model.Customer GetCustomerByPhone(long phoneNum)
         {
             Entity.Customer customerById = _context.Customers.FirstOrDefault(c => c.PhoneNum == phoneNum);
@@ -130,6 +157,11 @@ namespace DL
                 PhoneNum = customerById.PhoneNum
             };
         }
+
+        /// <summary>
+        /// adds new store and then adds inventories from all products
+        /// </summary>
+        /// <param name="store"></param>
         public void AddNewStoreFront(Model.StoreFront store)
         {
             Entity.StoreFront storeAdd = new Entity.StoreFront(){
@@ -151,6 +183,12 @@ namespace DL
             _context.SaveChanges();
             _context.ChangeTracker.Clear();
         }
+
+        /// <summary>
+        /// updates inventory with new inventory given
+        /// </summary>
+        /// <param name="inventory"></param>
+        /// <param name="storeId"></param>
         public void UpdateInventory(Model.Inventory inventory, int storeId)
         {
             Entity.Inventory inventoryUpdate = new Entity.Inventory(){
@@ -164,9 +202,14 @@ namespace DL
             _context.ChangeTracker.Clear();
         }
 
+        /// <summary>
+        /// gets all orders with from a customer sorted by date
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <returns> returns list of order sorted by date</returns>
         public List<Model.Order> GetAllOrdersByCustomerByDate(int customerId)
         {
-            List<Model.Order> orders = _context.Orders.Include("Customer").Where(Order => Order.CustomerId == customerId).Select(Order => new Model.Order{
+            List<Model.Order> orders = _context.Orders.Include("Customer").Where(Order => Order.CustomerId == customerId).OrderBy(Order => Order.Date).Select(Order => new Model.Order{
                 Id = Order.Id,
                 Cust = new Model.Customer(){
                     Id = Order.Customer.Id,
@@ -194,9 +237,14 @@ namespace DL
             return orders;
         }
 
+        /// <summary>
+        /// gets all orders with from a customer sorted by total
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <returns> returns list of order sorted by total</returns>
         public List<Model.Order> GetAllOrdersByCustomerByCost(int customerId)
         {
-            List<Model.Order> orders = _context.Orders.Include("Customer").Where(Order => Order.CustomerId == customerId).Select(Order => new Model.Order{
+            List<Model.Order> orders = _context.Orders.Include("Customer").Where(Order => Order.CustomerId == customerId).OrderBy(Order => Order.Total).Select(Order => new Model.Order{
                 Id = Order.Id,
                 Cust = new Model.Customer(){
                     Id = Order.Customer.Id,
@@ -224,9 +272,14 @@ namespace DL
             return orders;
         }
 
+        /// <summary>
+        /// gets all orders with from a store sorted by date
+        /// </summary>
+        /// <param name="storeAddress"></param>
+        /// <returns>returns list of order sorted by date</returns>
         public List<Model.Order> GetAllOrdersByStoreByDate(string storeAddress)
         {
-            List<Model.Order> orders = _context.Orders.Include("Customer").Where(Order => Order.StoreAddress == storeAddress).Select(Order => new Model.Order{
+            List<Model.Order> orders = _context.Orders.Include("Customer").Where(Order => Order.StoreAddress == storeAddress).OrderBy(Order => Order.Date).Select(Order => new Model.Order{
                 Id = Order.Id,
                 Cust = new Model.Customer(){
                     Id = Order.Customer.Id,
@@ -254,9 +307,14 @@ namespace DL
             return orders;
         }
 
+        /// <summary>
+        /// gets all orders with from a store sorted by total
+        /// </summary>
+        /// <param name="storeAddress"></param>
+        /// <returns>returns list of order sorted by total</returns>
         public List<Model.Order> GetAllOrdersByStoreByCost(string storeAddress)
         {
-            List<Model.Order> orders = _context.Orders.Include("Customer").Where(Order => Order.StoreAddress == storeAddress).Select(Order => new Model.Order{
+            List<Model.Order> orders = _context.Orders.Include("Customer").Where(Order => Order.StoreAddress == storeAddress).OrderBy(Order => Order.Total).Select(Order => new Model.Order{
                 Id = Order.Id,
                 Cust = new Model.Customer(){
                     Id = Order.Customer.Id,
