@@ -3,6 +3,9 @@ using Models;
 using StoreBL;
 using DL;
 using System.Transactions;
+using DL.Entities;
+using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace UI
 {
@@ -14,29 +17,33 @@ namespace UI
             _bl = bl;
         }
 
-        bool exit = false;
-            string input = "";
         public void Start()
         {   
+            string connectionString = File.ReadAllText(@"../connectionString.txt");
+            DbContextOptions<IIDBContext> options = new DbContextOptionsBuilder<IIDBContext>().UseSqlServer(connectionString).Options;
+            IIDBContext context = new IIDBContext(options);
+
+
             bool exit = false;
             string input = "";
             do
             {
-                Console.WriteLine("Welcome to My Store!");
+                Console.WriteLine("Welcome to Impossible Items!");
                 Console.WriteLine("Have you shopped with us before?");
                 Console.WriteLine("[0] Yes");
                 Console.WriteLine("[1] No");
                 Console.WriteLine("[x] Leave");
+                //Console.WriteLine(_bl.GetStoreFrontById(1));
                 input = Console.ReadLine();
 
                 switch (input)
                 {
                     case "0":
-                        new LoginMenu(new BL(new DBRepo())).Start();
+                        new LoginMenu(new BL(new DBRepo(context))).Start();
                         break;
 
                     case "1":
-                        new RegistrationMenu(new BL(new DBRepo())).Start();
+                        new RegistrationMenu(new BL(new DBRepo(context))).Start();
                         break;
 
                     case "x":
@@ -49,7 +56,7 @@ namespace UI
                         input = Console.ReadLine();
                         if(input == "qwerty")
                         {
-                            new AdminMenu(new BL(new DBRepo())).Start();
+                            new AdminMenu(new BL(new DBRepo(context))).Start();
                         }
                         else
                         {

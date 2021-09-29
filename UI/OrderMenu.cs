@@ -19,8 +19,9 @@ namespace UI
         }
         public void Start(int CustomerId)
         {
+            decimal Total = 0;
             Customer cust = _bl.GetCustomerByID(CustomerId);
-            Order CurrentOrder;
+            Order CurrentOrder = new Order();
             orderStart:
             Console.WriteLine("Select a Store to order from");
             List<StoreFront> allStores = _bl.GetALLStoreFront();
@@ -41,7 +42,7 @@ namespace UI
             {
                 StoreFront selectedStore = allStores[parsedInput];
                 DateTime thisday = DateTime.Today;
-                CurrentOrder = new Order(cust, selectedStore.Address, thisday.ToString());
+                CurrentOrder = new Order(cust, selectedStore.Address, thisday.ToString(), Total);
 
                 bool exit = false;
                 Console.WriteLine($"You picked {selectedStore.Address}");
@@ -68,13 +69,16 @@ namespace UI
                         Console.WriteLine("There are " + selectedInventory.Quantity + " " + selectedInventory.Item.Name + " left");
                         Console.WriteLine("How many do you want?");
                         input = Console.ReadLine();
+                        parseSuccess = Int32.TryParse(input, out parsedInput);
                         if(parseSuccess && parsedInput >= 0 && parsedInput <= selectedInventory.Quantity)
                         {
                             int many = parsedInput;
-                            OrderLine orderline = new OrderLine(selectedInventory.Item, many);
-                            CurrentOrder.OrderItems.Add(new OrderLine(selectedInventory.Item, many));
+                            Product aItem = selectedInventory.Item;
+                            OrderLine orderLineItem = new OrderLine(aItem, many);
+                            CurrentOrder.OrderItems.Add(orderLineItem);
                             selectedInventory.Quantity = selectedInventory.Quantity - many;
-                            _bl.UpdateInventory(selectedInventory);
+                            Total = Total + (aItem.Price * (decimal)many);
+                            _bl.UpdateInventory(selectedInventory, selectedStore.Id);
                             Console.WriteLine("Item added to Order");
                         }
                         else
@@ -94,14 +98,14 @@ namespace UI
                         goto orderItemStart;
                     }
 
-                }while(exit);
+                }while(!exit);
             }
             else
             {
                 Console.WriteLine("invalid input");
                 goto orderStart;
             }
-
+            CurrentOrder.Total = Total;
             _bl.SendOrder(CurrentOrder);
         }
     }

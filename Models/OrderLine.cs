@@ -4,6 +4,7 @@ namespace Models
 {
     public class OrderLine
     {
+        public OrderLine(){}
         public OrderLine(Product item, int quantity)
         {
             this.Item = item;

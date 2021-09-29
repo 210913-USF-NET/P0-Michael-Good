@@ -4,6 +4,9 @@ using Models;
 using Serilog.Events;
 using StoreBL;
 using DL;
+using DL.Entities;
+using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace UI
 {
@@ -16,17 +19,22 @@ namespace UI
         }
         public void Start()
         {
-            Customer customer;
+            string connectionString = File.ReadAllText(@"../connectionString.txt");
+            DbContextOptions<IIDBContext> options = new DbContextOptionsBuilder<IIDBContext>().UseSqlServer(connectionString).Options;
+            IIDBContext context = new IIDBContext(options);
+
+
+            Models.Customer customer;
             string input;
             RegStart:
             Console.WriteLine("Please enter your phone number no (, ), -");
             input = Console.ReadLine();
             long parsedInput;
             bool parseSuccess = Int64.TryParse(input, out parsedInput);
-            if(parseSuccess && parsedInput >= 0)
+            if(parseSuccess && parsedInput >= 1000000000)
             {
                 customer = _bl.GetCustomerByPhone(parsedInput);
-                if(customer.Id == 0)
+                if(customer.Id != 0)
                 {   
                     bool exit = false;
                     do{
@@ -36,10 +44,10 @@ namespace UI
                         input = Console.ReadLine();
                         switch (input)
                         {
-                            case "0":
+                            case "1":
                                 return;
 
-                            case "1":
+                            case "0":
                                 goto RegStart;
 
                             default:
@@ -58,11 +66,11 @@ namespace UI
             Console.WriteLine("Please enter your name");
             string name = Console.ReadLine();
 
-            Customer temp = new Customer(name, parsedInput);
-            
-            //add customer to database
-            
-            new OrderMenu(new BL(new DBRepo())).Start(customer.Id);
+            customer = new Models.Customer(name, parsedInput);
+            _bl.AddNewCustomer(customer);
+            customer = _bl.GetCustomerByPhone(parsedInput);
+            Console.WriteLine($"Welcome {customer.Name}!");
+            new OrderMenu(new BL(new DBRepo(context))).Start(customer.Id);
         }
     }
 }

@@ -2,6 +2,9 @@
 using Models;
 using StoreBL;
 using DL;
+using DL.Entities;
+using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace UI
 {
@@ -9,7 +12,11 @@ namespace UI
     {
         static void Main(string[] args)
         {
-            new MainMenu(new BL(new DBRepo())).Start();
+            string connectionString = File.ReadAllText(@"../connectionString.txt");
+            DbContextOptions<IIDBContext> options = new DbContextOptionsBuilder<IIDBContext>().UseSqlServer(connectionString).Options;
+            IIDBContext context = new IIDBContext(options);
+
+            new MainMenu(new BL(new DBRepo(context))).Start();
             
         }
     }

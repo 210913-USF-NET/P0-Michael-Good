@@ -8,6 +8,8 @@ using DL;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient.Server;
+using System.Threading.Tasks.Dataflow;
+using System.Diagnostics;
 
 namespace UI
 {
@@ -27,7 +29,9 @@ namespace UI
                 Console.WriteLine("Admin menu");
                 Console.WriteLine("[0] Restock Store");
                 Console.WriteLine("[1] Make new Store");
+                Console.WriteLine("[2] View Orders");
                 Console.WriteLine("[x] Leave");
+                
                 input = Console.ReadLine();
 
                 switch (input)
@@ -37,7 +41,11 @@ namespace UI
                         break;
 
                     case "1":
-
+                        CreateStore();
+                        break;
+                        
+                    case "2":
+                        ViewOrders();
                         break;
 
                     case "x":
@@ -96,11 +104,16 @@ namespace UI
                         fillManyStart:
                         Console.WriteLine("How much is being added");
                         input = Console.ReadLine();
+                        parseSuccess = Int32.TryParse(input, out parsedInput);
                         if(parseSuccess && parsedInput >= 0)
                         {
                             int many = parsedInput;
                             selectedInventory.Quantity = selectedInventory.Quantity + many;
-                            _bl.UpdateInventory(selectedInventory);
+                            _bl.UpdateInventory(selectedInventory, selectedStore.Id);
+                        }
+                        else if(input == "x")
+                        {
+                            storeExit = true;
                         }
                         else
                         {
@@ -119,7 +132,7 @@ namespace UI
                         goto fillItemStart;
                     }
 
-                }while(storeExit);
+                }while(!storeExit);
             }
             else
             {
@@ -134,6 +147,160 @@ namespace UI
             string input = Console.ReadLine();
             StoreFront store = new StoreFront(input);
             _bl.AddNewStoreFront(store);
+        }
+
+        public void ViewOrders()
+        {
+            Console.WriteLine("[0] View Orders by customer ordered by price");
+            Console.WriteLine("[1] View Orders by customer ordered by date");
+            Console.WriteLine("[2] View Orders by store ordered by price");
+            Console.WriteLine("[3] View Orders by store ordered by date");
+            Console.WriteLine("[x] Leave");
+            string input = Console.ReadLine();
+
+                switch (input)
+                {
+                    case "0":
+                        cpStart:
+                        Customer cust;
+                        Console.WriteLine("Enter customer Phone Number");
+                        input = Console.ReadLine();
+                        long parsedInput;
+                        bool parseSuccess = Int64.TryParse(input, out parsedInput);
+                        if(parseSuccess && parsedInput >= 0)
+                        {
+                            cust = _bl.GetCustomerByPhone(parsedInput);
+                            if(cust.Id == 0)
+                            {
+                                Console.WriteLine("No Customer with that Phone Number");
+                                goto cpStart;
+                            }
+                        }
+                        else
+                        {   
+                            Console.WriteLine("invalid input");
+                            goto cpStart;
+                        }
+                        List<Order> orders = _bl.GetAllOrdersByCustomerByCost(cust.Id);
+                        foreach(Order o in orders)
+                        {
+                            Console.WriteLine("Order:");
+                            Console.WriteLine($" Customer Name: {o.Cust.Name}, Store ordered From: [{o.StoreAddress}], Date Ordered: {o.DateOfOrder}, Total{o.Total}");
+                            Console.WriteLine("   Contains:");
+                            foreach(OrderLine ol in o.OrderItems)
+                            {
+                                Console.WriteLine($"    Product Name: {ol.Item.Name}, Amount: {ol.Quantity}");
+                            }
+                        }
+                        break;
+
+                    case "1":
+                        cdStart:
+                        Console.WriteLine("Enter customer Phone Number");
+                        input = Console.ReadLine();
+                        parseSuccess = Int64.TryParse(input, out parsedInput);
+                        if(parseSuccess && parsedInput >= 0)
+                        {
+                            cust = _bl.GetCustomerByPhone(parsedInput);
+                            if(cust.Id == 0)
+                            {
+                                Console.WriteLine("No Customer with that Phone Number");
+                                goto cdStart;
+                            }
+                        }
+                        else
+                        {   
+                            Console.WriteLine("invalid input");
+                            goto cdStart;
+                        }
+                        orders = _bl.GetAllOrdersByCustomerByDate(cust.Id);
+                        foreach(Order o in orders)
+                        {
+                            Console.WriteLine("Order:");
+                            Console.WriteLine($" Customer Name: {o.Cust.Name}, Store ordered From: [{o.StoreAddress}], Date Ordered: {o.DateOfOrder}, Total{o.Total}");
+                            Console.WriteLine("   Contains:");
+                            foreach(OrderLine ol in o.OrderItems)
+                            {
+                                Console.WriteLine($"    Product Name: {ol.Item.Name}, Amount: {ol.Quantity}");
+                            }
+                        }
+                        break;
+                        
+                    case "2":
+                        spStart:
+                        Console.WriteLine("Enter Store Id");
+                        input = Console.ReadLine();
+                        StoreFront store = new StoreFront();
+                        int parsedInput2;
+                        parseSuccess = Int32.TryParse(input, out parsedInput2);
+                        if(parseSuccess && parsedInput2 >= 0)
+                        {
+                            store = _bl.GetStoreFrontById(parsedInput2);
+                            if(store.Id == 0)
+                            {
+                                Console.WriteLine("No store with that Id");
+                                goto spStart;
+                            }
+                        }
+                        else
+                        {   
+                            Console.WriteLine("invalid input");
+                            goto spStart;
+                        }
+                        orders = _bl.GetAllOrdersByStoreByCost(store.Address);
+                        foreach(Order o in orders)
+                        {
+                            Console.WriteLine("Order:");
+                            Console.WriteLine($" Customer Name: {o.Cust.Name}, Store ordered From: [{o.StoreAddress}], Date Ordered: {o.DateOfOrder}, Total{o.Total}");
+                            Console.WriteLine("   Contains:");
+                            foreach(OrderLine ol in o.OrderItems)
+                            {
+                                Console.WriteLine($"    Product Name: {ol.Item.Name}, Amount: {ol.Quantity}");
+                            }
+                        }
+                        break;
+                    
+                    case "3":
+                        sdStart:
+                        Console.WriteLine("Enter Store Id");
+                        input = Console.ReadLine();
+                        store = new StoreFront();
+                        parseSuccess = Int32.TryParse(input, out parsedInput2);
+                        if(parseSuccess && parsedInput2 >= 0)
+                        {
+                            store = _bl.GetStoreFrontById(parsedInput2);
+                            if(store.Id == 0)
+                            {
+                                Console.WriteLine("No store with that Id");
+                                goto sdStart;
+                            }
+                        }
+                        else
+                        {   
+                            Console.WriteLine("invalid input");
+                            goto sdStart;
+                        }
+                        orders = _bl.GetAllOrdersByStoreByDate(store.Address);
+                        foreach(Order o in orders)
+                        {
+                            Console.WriteLine("Order:");
+                            Console.WriteLine($" Customer Name: {o.Cust.Name}, Store ordered From: [{o.StoreAddress}], Date Ordered: {o.DateOfOrder}, Total{o.Total}");
+                            Console.WriteLine("   Contains:");
+                            foreach(OrderLine ol in o.OrderItems)
+                            {
+                                Console.WriteLine($"    Product Name: {ol.Item.Name}, Amount: {ol.Quantity}");
+                            }
+                        }
+                        break;
+
+                    case "x":
+                        break;
+                    
+                    default:
+                        Console.WriteLine("Sorry, what you typed in was not a valid responce");
+                        break;
+                }
+
         }
     }
 }

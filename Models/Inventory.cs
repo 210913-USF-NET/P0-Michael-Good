@@ -4,6 +4,7 @@ namespace Models
 {
     public class Inventory
     {
+        public Inventory(){}
         public Inventory(Product item, int quantity)
         {
             this.Item = item;

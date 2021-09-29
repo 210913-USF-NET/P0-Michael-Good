@@ -7,8 +7,15 @@ namespace DL.Entities
 {
     public partial class Customer
     {
+        public Customer()
+        {
+            Orders = new HashSet<Order>();
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
-        public int? PhoneNum { get; set; }
+        public long PhoneNum { get; set; }
+
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

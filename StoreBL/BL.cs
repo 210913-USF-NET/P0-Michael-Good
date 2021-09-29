@@ -2,6 +2,8 @@
 using System;
 using Models;
 using DL;
+using System.Diagnostics.Contracts;
+using System.Net.Sockets;
 
 namespace StoreBL
 {
@@ -34,13 +36,33 @@ namespace StoreBL
         {
             _repo.AddNewStoreFront(store);
         }
-        public void UpdateInventory(Inventory inventory)
+        public void UpdateInventory(Inventory inventory,int storeId)
         {
-            _repo.UpdateInventory(inventory);
+            _repo.UpdateInventory(inventory, storeId);
         }
         public void AddNewCustomer(Customer customer)
         {
             _repo.AddNewCustomer(customer);
+        }
+        public StoreFront GetStoreFrontById(int id)
+        {
+            return _repo.GetStoreFrontById(id);
+        }
+        List<Order> IBL.GetAllOrdersByCustomerByDate(int customerId)
+        {
+            return _repo.GetAllOrdersByCustomerByDate(customerId);
+        }
+        List<Order> IBL.GetAllOrdersByCustomerByCost(int customerId)
+        {
+            return _repo.GetAllOrdersByCustomerByCost(customerId);
+        }
+        List<Order> IBL.GetAllOrdersByStoreByDate(string storeAddress)
+        {
+            return _repo.GetAllOrdersByStoreByDate(storeAddress);
+        }
+        List<Order> IBL.GetAllOrdersByStoreByCost(string storeAddress)
+        {
+            return _repo.GetAllOrdersByStoreByCost(storeAddress);
         }
     }
 }

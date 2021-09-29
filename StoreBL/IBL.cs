@@ -10,7 +10,12 @@ namespace StoreBL
         Customer GetCustomerByID(int CustomerId);
         Customer GetCustomerByPhone(long phoneNum);
         void AddNewStoreFront(StoreFront store);
-        void UpdateInventory(Inventory inventory);
+        void UpdateInventory(Inventory inventory, int StoreId);
         void AddNewCustomer(Customer customer);
+        StoreFront GetStoreFrontById(int id);
+        List<Order> GetAllOrdersByCustomerByDate(int customerId);
+        List<Order> GetAllOrdersByCustomerByCost(int customerId);
+        List<Order> GetAllOrdersByStoreByDate(string storeAddress);
+        List<Order> GetAllOrdersByStoreByCost(string storeAddress);
     }
 }

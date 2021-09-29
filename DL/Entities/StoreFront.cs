@@ -5,19 +5,16 @@ using System.Collections.Generic;
 
 namespace DL.Entities
 {
-    public partial class Product
+    public partial class StoreFront
     {
-        public Product()
+        public StoreFront()
         {
             Inventories = new HashSet<Inventory>();
-            OrderLines = new HashSet<OrderLine>();
         }
 
         public int Id { get; set; }
-        public string Name { get; set; }
-        public decimal? Price { get; set; }
+        public string Address { get; set; }
 
         public virtual ICollection<Inventory> Inventories { get; set; }
-        public virtual ICollection<OrderLine> OrderLines { get; set; }
     }
 }

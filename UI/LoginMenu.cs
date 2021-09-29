@@ -2,6 +2,9 @@ using System;
 using Models;
 using StoreBL;
 using DL;
+using DL.Entities;
+using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace UI
 {
@@ -14,7 +17,11 @@ namespace UI
         }
         public void Start()
         {
-            Customer customer = null;
+            string connectionString = File.ReadAllText(@"../connectionString.txt");
+            DbContextOptions<IIDBContext> options = new DbContextOptionsBuilder<IIDBContext>().UseSqlServer(connectionString).Options;
+            IIDBContext context = new IIDBContext(options);
+
+            Models.Customer customer = null;
             string input;
             LogStart:
             Console.WriteLine("Please enter your phone number no (, ), -");
@@ -51,7 +58,8 @@ namespace UI
                 goto LogStart;
             }
 
-            new OrderMenu(new BL(new DBRepo())).Start(customer.Id);
+            Console.WriteLine($"Welcome Back {customer.Name}!");
+            new OrderMenu(new BL(new DBRepo(context))).Start(customer.Id);
         }
     }
 }

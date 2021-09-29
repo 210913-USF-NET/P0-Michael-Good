@@ -5,6 +5,9 @@ namespace Models
 {
     public class StoreFront
     {
+        public StoreFront(){
+            Id = 0;
+        }
         public StoreFront(string address)
         {
             this.Address = address;
