@@ -202,7 +202,7 @@ namespace UI
                         foreach(Order o in orders)
                         {
                             Console.WriteLine("Order:");
-                            Console.WriteLine($" Customer Name: {o.Cust.Name}, Store ordered From: [{o.StoreAddress}], Date Ordered: {o.DateOfOrder}, Total{o.Total}");
+                            Console.WriteLine($" Customer Name: {o.Cust.Name}, Store ordered From: [{o.StoreAddress}], Date Ordered: {o.DateOfOrder}, Total: {o.Total}");
                             Console.WriteLine("   Contains:");
                             foreach(OrderLine ol in o.OrderItems)
                             {
@@ -234,7 +234,7 @@ namespace UI
                         foreach(Order o in orders)
                         {
                             Console.WriteLine("Order:");
-                            Console.WriteLine($" Customer Name: {o.Cust.Name}, Store ordered From: [{o.StoreAddress}], Date Ordered: {o.DateOfOrder}, Total{o.Total}");
+                            Console.WriteLine($" Customer Name: {o.Cust.Name}, Store ordered From: [{o.StoreAddress}], Date Ordered: {o.DateOfOrder}, Total: {o.Total}");
                             Console.WriteLine("   Contains:");
                             foreach(OrderLine ol in o.OrderItems)
                             {
@@ -268,7 +268,7 @@ namespace UI
                         foreach(Order o in orders)
                         {
                             Console.WriteLine("Order:");
-                            Console.WriteLine($" Customer Name: {o.Cust.Name}, Store ordered From: [{o.StoreAddress}], Date Ordered: {o.DateOfOrder}, Total{o.Total}");
+                            Console.WriteLine($" Customer Name: {o.Cust.Name}, Store ordered From: [{o.StoreAddress}], Date Ordered: {o.DateOfOrder}, Total: {o.Total}");
                             Console.WriteLine("   Contains:");
                             foreach(OrderLine ol in o.OrderItems)
                             {
@@ -301,7 +301,7 @@ namespace UI
                         foreach(Order o in orders)
                         {
                             Console.WriteLine("Order:");
-                            Console.WriteLine($" Customer Name: {o.Cust.Name}, Store ordered From: [{o.StoreAddress}], Date Ordered: {o.DateOfOrder}, Total{o.Total}");
+                            Console.WriteLine($" Customer Name: {o.Cust.Name}, Store ordered From: [{o.StoreAddress}], Date Ordered: {o.DateOfOrder}, Total: {o.Total}");
                             Console.WriteLine("   Contains:");
                             foreach(OrderLine ol in o.OrderItems)
                             {
