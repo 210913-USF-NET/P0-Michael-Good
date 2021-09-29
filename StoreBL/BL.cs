@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
-using System;
 using Models;
 using DL;
-using System.Diagnostics.Contracts;
-using System.Net.Sockets;
 
 namespace StoreBL
 {

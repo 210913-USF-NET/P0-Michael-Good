@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
-using Models;
-using Serilog.Events;
+using Serilog;
 using StoreBL;
 using DL;
 using DL.Entities;
@@ -72,6 +70,8 @@ namespace UI
             string name = Console.ReadLine();
 
             customer = new Models.Customer(name, parsedInput);
+
+            Log.Information($"Customer being added Name: {customer.Name}, PhoneNum: {customer.PhoneNum}");
             _bl.AddNewCustomer(customer);
             customer = _bl.GetCustomerByPhone(parsedInput);
             Console.WriteLine($"Welcome {customer.Name}!");

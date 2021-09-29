@@ -1,15 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Models;
-using Serilog.Events;
+using Serilog;
 using StoreBL;
-using DL;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using Microsoft.Data.SqlClient.Server;
-using System.Threading.Tasks.Dataflow;
-using System.Diagnostics;
+
 
 namespace UI
 {
@@ -160,6 +154,7 @@ namespace UI
             Console.WriteLine("please enter the address for the new store");
             string input = Console.ReadLine();
             StoreFront store = new StoreFront(input);
+            Log.Information($"StoreFront being added Address: {store.Address}");
             _bl.AddNewStoreFront(store);
         }
 
