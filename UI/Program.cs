@@ -18,7 +18,6 @@ namespace UI
 
             Log.Information("Application Starting...");
 
-
             string connectionString = File.ReadAllText(@"../connectionString.txt");
             DbContextOptions<IIDBContext> options = new DbContextOptionsBuilder<IIDBContext>().UseSqlServer(connectionString).Options;
             IIDBContext context = new IIDBContext(options);
