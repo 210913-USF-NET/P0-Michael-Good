@@ -1,1 +1,0 @@
-Server=tcp:iiserver.database.windows.net,1433;Initial Catalog=IIDB;Persist Security Info=False;User ID=ii-admin;Password=IIhatepasswords2;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
